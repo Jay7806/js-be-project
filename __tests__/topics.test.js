@@ -38,5 +38,26 @@ describe("app", () => {
           });
         });
     });
+    test("GET: 200 sends an array of topics with properties of slug and description", () => {
+      return request(app)
+        .get("/api/topics")
+        .expect(200)
+        .then(({ body }) => {
+          expect(body).toBeInstanceOf(Object);
+        });
+    });
+    test("GET: 200 sends an array of topics with properties of slug and description", () => {
+      return request(app)
+        .get("/api/topics")
+        .expect(200)
+        .then(({body}) => {
+            const response = body.topics
+           expect(response).toHaveLength(3)
+          response.forEach((topic) => {
+            expect(topic).toHaveProperty("slug", expect.any(String));
+            expect(topic).toHaveProperty("description", expect.any(String));
+          });
+        });
+    });
   });
 });
