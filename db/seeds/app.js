@@ -18,7 +18,7 @@ app.get("/api/topics", getTopics);
 
 app.get("/api", getApi);
 
-app.get("/api/articles", getArticlesById);
+app.get("/api/articles/:article_id", getArticlesById);
 
 app.use((req, res) => {
     res.status(404).send({msg: 'Not found'})

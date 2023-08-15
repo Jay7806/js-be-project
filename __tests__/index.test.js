@@ -75,7 +75,7 @@ describe("endpoints", () => {
 describe("api/articles", () => {
   test("200: Returns an article by the ID that is passed", () => {
     return request(app)
-      .get("/api/articles?article_id=5")
+      .get("/api/articles/5")
       .expect(200)
       .then(({ body }) => {
         const { articles } = body;

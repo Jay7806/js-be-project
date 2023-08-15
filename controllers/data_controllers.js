@@ -16,7 +16,7 @@ exports.getTopics = (req, res, next) => {
     });
 };
 exports.getArticlesById = (req, res, next) => {
-  const { article_id } = req.query;
+  const { article_id } = req.params;
   selectArticleById(article_id)
     .then((articles) => {
       if (articles.length === 0) {
