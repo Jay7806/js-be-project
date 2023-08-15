@@ -65,7 +65,6 @@ describe("app", () => {
 describe("endpoints", () => {
   test("GET: /api provides json documentation for all endpoints", () => {
     return request(app).get("/api").expect(200).then((response)=> {
-      console.log(endpointData, 'EndPoint');
     expect(response.body.data).toEqual(endpointData);
     })
      });

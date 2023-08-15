@@ -6,7 +6,7 @@ const {
   postTopic,
   getTopicByDescription,
   getApi,
-} = require("../../controllers/topics_controller");
+} = require("../../controllers/all_controllers");
 const { getHealthCheck } = require("../../controllers/healthcheck_controller");
 
 app.use(express.json());
