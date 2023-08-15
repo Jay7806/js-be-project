@@ -6,7 +6,8 @@ const {
   postTopic,
   getTopicByDescription,
   getApi,
-} = require("../../controllers/all_controllers");
+  getArticlesById,
+} = require("../../controllers/data_controllers");
 const { getHealthCheck } = require("../../controllers/healthcheck_controller");
 
 app.use(express.json());
@@ -16,5 +17,20 @@ app.get("/api/healthcheck", getHealthCheck);
 app.get("/api/topics", getTopics);
 
 app.get("/api", getApi);
+
+app.get("/api/articles", getArticlesById);
+
+app.use((req, res) => {
+    res.status(404).send({msg: 'Not found'})
+});
+app.use((err, req, res, next) => {
+  if (err.status) {
+    res.status(err.status).json({ msg: err.msg });
+  } else {
+    console.error(err);
+    res.status(500).json({ msg: "Internal Server Error" });
+  }
+});
+
 
 module.exports = app;

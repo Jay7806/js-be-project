@@ -64,8 +64,36 @@ describe("app", () => {
 });
 describe("endpoints", () => {
   test("GET: /api provides json documentation for all endpoints", () => {
-    return request(app).get("/api").expect(200).then((response)=> {
-    expect(response.body.data).toEqual(endpointData);
-    })
-     });
+    return request(app)
+      .get("/api")
+      .expect(200)
+      .then((response) => {
+        expect(response.body.data).toEqual(endpointData);
+      });
+  });
+});
+describe("api/articles", () => {
+  test("200: Returns an article by the ID that is passed", () => {
+    return request(app)
+      .get("/api/articles?article_id=5")
+      .expect(200)
+      .then(({ body }) => {
+        const { articles } = body;
+        expect(articles).toBeDefined();
+        expect(Array.isArray(articles)).toBe(true);
+        expect(articles).toHaveLength(1);
+        articles.forEach(({ article_id }) => {
+          expect(article_id).toBe(5);
+        });
+      });
+  });
+  test("404: receive a 404 error when article id is not found", () => {
+    return request(app)
+      .get("/api/articles?article_id=22")
+      .expect(404)
+      .then(({ body }) => {
+        const { msg } = body;
+        expect(msg).toEqual("Not found");
+      });
+  });
 });
