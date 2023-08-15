@@ -25,5 +25,32 @@
         }
       ]
     }
+  },
+  "G /api/comments": {
+    "description": "serves an array of all comments",
+    "queries": ["author"],
+    "exampleResponse": {
+      "comments": [
+        {
+          "body": "Text from the article..",
+          "votes": 3,
+          "author": "grumpy19",
+          "article_id": 3,
+          "created_at": "1600820280000"
+        }
+      ]
+    }
+  },
+  "Get /api/users": {
+    "description": "serves an array of all topics",
+    "queries": ["username", "name"],
+    "exampleResponse": {
+      "users": [
+        {
+          "username": "cooljmessy",
+          "name": "Peter Messy"
+        }
+      ]
+    }
   }
 }
