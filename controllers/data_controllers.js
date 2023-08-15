@@ -19,11 +19,7 @@ exports.getArticlesById = (req, res, next) => {
   const { article_id } = req.params;
   selectArticleById(article_id)
     .then((articles) => {
-      if (articles.length === 0) {
-        res.status(404).send({ msg: "Not found" });
-      } else {
-        res.status(200).send({ articles });
-      }
+      res.status(200).send({ articles });
     })
     .catch((err) => {
       next(err);

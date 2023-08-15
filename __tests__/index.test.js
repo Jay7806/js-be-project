@@ -79,8 +79,6 @@ describe("api/articles", () => {
       .expect(200)
       .then(({ body }) => {
         const { articles } = body;
-        expect(articles).toBeDefined();
-        expect(Array.isArray(articles)).toBe(true);
         expect(articles).toHaveLength(1);
         articles.forEach(({ article_id }) => {
           expect(article_id).toBe(5);
@@ -89,11 +87,20 @@ describe("api/articles", () => {
   });
   test("404: receive a 404 error when article id is not found", () => {
     return request(app)
-      .get("/api/articles?article_id=22")
+      .get("/api/articles/22")
       .expect(404)
       .then(({ body }) => {
         const { msg } = body;
         expect(msg).toEqual("Not found");
+      });
+  });
+  test("400: receive a 400 error when it is a bad request", () => {
+    return request(app)
+      .get("/api/articles/articlesid")
+      .expect(400)
+      .then(({ body }) => {
+        const { msg } = body;
+        expect(msg).toEqual("Bad request");
       });
   });
 });
