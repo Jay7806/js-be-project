@@ -1,14 +1,18 @@
 const express = require("express");
 const fs = require("fs/promises");
 const app = express();
+const { getTopics } = require("../../controllers/topics_controller");
 const {
-  getTopics,
-  postTopic,
-  getTopicByDescription,
   getApi,
   getArticlesById,
-} = require("../../controllers/data_controllers");
+  getArticles,
+} = require("../../controllers/articles_controller");
 const { getHealthCheck } = require("../../controllers/healthcheck_controller");
+const {
+  handle400,
+  handle404,
+  handle500,
+} = require("../../controllers/errors_controller");
 
 app.use(express.json());
 
@@ -20,22 +24,10 @@ app.get("/api", getApi);
 
 app.get("/api/articles/:article_id", getArticlesById);
 
-app.use((req, res) => {
-    res.status(404).send({msg: 'Not found'})
-});
-app.use((err, req, res, next) => {
-  if (err.code === "22P02") {
-    res.status(400).send({ msg: "Bad request" });
-  } else next(err);
-});
-app.use((err, req, res, next) => {
-  if (err.status) {
-    res.status(err.status).json({ msg: err.msg });
-  } else {
-    (err);
-    res.status(500).json({ msg: "Internal Server Error" });
-  }
-});
+app.get("/api/articles", getArticles);
 
+app.use(handle404);
+app.use(handle400);
+app.use(handle500);
 
 module.exports = app;
