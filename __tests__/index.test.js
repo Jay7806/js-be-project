@@ -3,6 +3,7 @@ const request = require("supertest");
 const connection = require("../db/connection");
 const seed = require("../db/seeds/seed");
 const data = require("../db/data/test-data/index");
+const endpointData = require("../endpoints.json");
 
 afterAll(() => {
   return connection.end();
@@ -50,9 +51,9 @@ describe("app", () => {
       return request(app)
         .get("/api/topics")
         .expect(200)
-        .then(({body}) => {
-            const response = body.topics
-           expect(response).toHaveLength(3)
+        .then(({ body }) => {
+          const response = body.topics;
+          expect(response).toHaveLength(3);
           response.forEach((topic) => {
             expect(topic).toHaveProperty("slug", expect.any(String));
             expect(topic).toHaveProperty("description", expect.any(String));
@@ -60,4 +61,12 @@ describe("app", () => {
         });
     });
   });
+});
+describe("endpoints", () => {
+  test("GET: /api provides json documentation for all endpoints", () => {
+    return request(app).get("/api").expect(200).then((response)=> {
+      console.log(endpointData, 'EndPoint');
+    expect(response.body.data).toEqual(endpointData);
+    })
+     });
 });

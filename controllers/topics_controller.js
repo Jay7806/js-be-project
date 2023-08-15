@@ -1,3 +1,4 @@
+const fs = require('fs/promises');
 const {
   selectTopics,
   insertTopic,
@@ -13,3 +14,15 @@ exports.getTopics = (req, res, next) => {
       next(err);
     });
 };
+exports.getApi = (req, res) => {
+  fs.readFile(`${__dirname}/../endpoints.json`, "utf-8")
+    .then((dataString) => {
+      //console.log(dataString, 'DataString');
+       const parsedData = JSON.parse(dataString);
+       console.log(parsedData);
+       res.status(200).send({ data: parsedData });
+    // })
+    // .catch((error) => {
+    //   console.log("Error reading endpoints.json:", error);
+    });
+  }
