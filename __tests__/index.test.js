@@ -113,7 +113,7 @@ describe("api/articles", () => {
       .then(({ body }) => {
         const { articles } = body;
         expect(articles).toHaveLength(13);
-        expect(articles).toBeSortedBy(articles.created_by);
+        expect(articles).toBeSortedBy(articles.created_by,{descending: true});
         articles.forEach((article) => {
           expect(article).toHaveProperty(
             "article_id",
@@ -147,7 +147,9 @@ describe("/api/articles/:article_id/comments", () => {
       .then(({ body }) => {
         const { comments } = body;
         expect(comments).toHaveLength(2);
-        expect(comments).toBeSortedBy(comments.created_by);
+        expect(comments).toBeSortedBy(comments.created_by, {
+          descending: true,
+        });
         comments.forEach((comment) => {
           expect(comment).toHaveProperty(
             "comment_id",
