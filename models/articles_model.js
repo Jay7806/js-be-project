@@ -29,4 +29,16 @@ exports.selectArticles = () => {
       throw err;
     });
 };
-
+exports.selectComments = (article_id) => {
+  return db
+    .query(
+      `SELECT comments.*
+       FROM comments
+       WHERE comments.article_id = $1
+       ORDER BY comments.created_at DESC`,
+      [article_id]
+    )
+    .then(({ rows }) => {
+            return rows;
+  })
+   };
