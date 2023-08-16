@@ -2,6 +2,7 @@ const fs = require("fs/promises");
 const {
   selectArticleById,
   selectArticles,
+  selectComments,
 } = require("../models/articles_model");
 
 exports.getArticlesById = (req, res, next) => {
@@ -19,6 +20,20 @@ exports.getArticles = (req, res, next) => {
   selectArticles()
     .then((articles) => {
       res.status(200).send({ articles });
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
+exports.getCommentsByArticleId = (req, res, next) => {
+  const { article_id } = req.params;
+    const promises = [
+      selectArticleById(article_id),
+      selectComments(article_id),
+    ];
+Promise.all(promises)
+     .then((resultPromises) => {
+      res.status(200).send({ comments: resultPromises[1] });
     })
     .catch((err) => {
       next(err);

@@ -2,10 +2,12 @@ const express = require("express");
 const fs = require("fs/promises");
 const app = express();
 const { getTopics } = require("../../controllers/topics_controller");
+const {} = require("../../controllers/comments_controller");
 const {
   getApi,
   getArticlesById,
   getArticles,
+  getCommentsByArticleId,
 } = require("../../controllers/articles_controller");
 const { getHealthCheck } = require("../../controllers/healthcheck_controller");
 const {
@@ -25,6 +27,8 @@ app.get("/api", getApi);
 app.get("/api/articles/:article_id", getArticlesById);
 
 app.get("/api/articles", getArticles);
+
+app.get("/api/articles/:article_id/comments", getCommentsByArticleId);
 
 app.use(handle404);
 app.use(handle400);
