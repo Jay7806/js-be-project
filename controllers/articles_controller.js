@@ -2,7 +2,6 @@ const fs = require("fs/promises");
 const {
   selectArticleById,
   selectArticles,
-  selectComments,
 } = require("../models/articles_model");
 
 exports.getArticlesById = (req, res, next) => {
@@ -15,7 +14,6 @@ exports.getArticlesById = (req, res, next) => {
       next(err);
     });
 };
-
 exports.getArticles = (req, res, next) => {
   selectArticles()
     .then((articles) => {
@@ -25,21 +23,6 @@ exports.getArticles = (req, res, next) => {
       next(err);
     });
 };
-exports.getCommentsByArticleId = (req, res, next) => {
-  const { article_id } = req.params;
-    const promises = [
-      selectArticleById(article_id),
-      selectComments(article_id),
-    ];
-Promise.all(promises)
-     .then((resultPromises) => {
-      res.status(200).send({ comments: resultPromises[1] });
-    })
-    .catch((err) => {
-      next(err);
-    });
-};
-
 exports.getApi = (req, res) => {
   fs.readFile(`${__dirname}/../endpoints.json`, "utf-8")
     .then((dataString) => {
@@ -50,3 +33,7 @@ exports.getApi = (req, res) => {
       console.log("Error reading endpoints.json:", error);
     });
 };
+
+
+
+

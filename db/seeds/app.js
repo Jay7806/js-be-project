@@ -2,12 +2,14 @@ const express = require("express");
 const fs = require("fs/promises");
 const app = express();
 const { getTopics } = require("../../controllers/topics_controller");
-const {} = require("../../controllers/comments_controller");
+const {
+  getCommentsByArticleId,
+  postComment,
+} = require("../../controllers/comments_controller");
 const {
   getApi,
   getArticlesById,
   getArticles,
-  getCommentsByArticleId,
 } = require("../../controllers/articles_controller");
 const { getHealthCheck } = require("../../controllers/healthcheck_controller");
 const {
@@ -30,8 +32,11 @@ app.get("/api/articles", getArticles);
 
 app.get("/api/articles/:article_id/comments", getCommentsByArticleId);
 
+app.post("/api/articles/:article_id/comments", postComment);
+
 app.use(handle404);
 app.use(handle400);
 app.use(handle500);
+
 
 module.exports = app;

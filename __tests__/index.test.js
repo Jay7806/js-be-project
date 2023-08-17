@@ -113,7 +113,9 @@ describe("api/articles", () => {
       .then(({ body }) => {
         const { articles } = body;
         expect(articles).toHaveLength(13);
-        expect(articles).toBeSortedBy(articles.created_by,{descending: true});
+        expect(articles).toBeSortedBy(articles.created_by, {
+          descending: true,
+        });
         articles.forEach((article) => {
           expect(article).toHaveProperty(
             "article_id",
@@ -130,17 +132,17 @@ describe("api/articles", () => {
   });
 });
 describe("/api/articles/:article_id/comments", () => {
-   test("returns an empty array when the article id doesnt have any comments ", () => {
-     return request(app)
-       .get("/api/articles/2/comments")
-       .expect(200)
-       .then(({ body }) => {
-         const { comments } = body;
-         expect(comments).toHaveLength(0);
-         expect(comments).toEqual([]);
-       });
-   });
-   test("Responds with an array of comments from a specific article id", () => {
+  test("returns an empty array when the article id doesnt have any comments ", () => {
+    return request(app)
+      .get("/api/articles/2/comments")
+      .expect(200)
+      .then(({ body }) => {
+        const { comments } = body;
+        expect(comments).toHaveLength(0);
+        expect(comments).toEqual([]);
+      });
+  });
+  test("Responds with an array of comments from a specific article id", () => {
     return request(app)
       .get("/api/articles/9/comments")
       .expect(200)
@@ -178,6 +180,79 @@ describe("/api/articles/:article_id/comments", () => {
       .then(({ body }) => {
         const { msg } = body;
         expect(msg).toEqual("Bad request");
+      });
+  });
+});
+describe("/api/articles/:article_id/comments", () => {
+  test("POST:201 inserts a new comment to articles and sends the new comment back", () => {
+    const newComment = {
+      author: "butter_bridge",
+      body: "I am 100% sure that we're not completely sure.",
+    };
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send(newComment)
+      .expect(201)
+      .then((response) => {
+        expect(response.body.comment.comment_id).toBe(19);
+        expect(response.body.comment.body).toEqual("I am 100% sure that we're not completely sure.");
+        expect(response.body.comment.author).toEqual("butter_bridge")
+       });
+    });
+  test("POST:201 inserts a new comment to articles and sends the new comment back with a property that doesn't exist", () => {
+    const newComment = {
+      author: "butter_bridge",
+      body: "I am 100% sure that we're not completely sure.",
+      user: 'Hello'
+    };
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send(newComment)
+      .expect(201)
+      .then((response) => {
+        expect(response.body.comment.article_id).toBe(1);
+      });
+  });
+  test("POST:400 responds with an appropriate error message when provided with a bad comment", () => {
+        const newComment = {
+          author: "butter_bridge",
+          body: "I am 100% sure that we're not completely sure.",
+        };
+    return request(app)
+      .post("/api/articles/article/comments")
+      .send(newComment)
+      .expect(400)
+      .then(({body}) => {
+        const {msg} = body;
+        expect(msg).toEqual("Bad request");
+      });
+  });
+  test("404: receive a 404 error when no comments match the article id", () => {
+    const newComment = {
+      author: "butter_bridge",
+      body: "I am 100% sure that we're not completely sure.",
+    };
+    return request(app)
+      .post("/api/articles/40/comments")
+      .send(newComment)
+      .expect(404)
+      .then(({ body }) => {
+        const { msg } = body;
+        expect(msg).toEqual("Not found");
+      });
+  });
+  test("404: receive a 404 error when username doesn't exist in users", () => {
+    const newComment = {
+      author: 'Non author',
+      body: "I am 100% sure that we're not completely sure."
+    }
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send(newComment)
+      .expect(404)
+      .then(({ body }) => {
+        const { msg } = body;
+        expect(msg).toEqual("Not found");
       });
   });
 });
