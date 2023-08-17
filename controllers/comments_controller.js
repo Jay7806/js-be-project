@@ -15,16 +15,11 @@ exports.getCommentsByArticleId = (req, res, next) => {
 };
 exports.postComment = (req, res, next) => {
   const { article_id } = req.params;
-  const promises = [
-    selectArticleById(article_id),
-    insertComments(req.body, article_id),
-  ];
-  Promise.all(promises)
-    .then((resultPromises) => {
-      res.status(201).send({ comment: resultPromises[1] });
+  insertComments(req.body, article_id)
+   .then((comment) => {
+   res.status(201).send({ comment });
     })
     .catch((err) => {
       next(err);
     });
 };
-
