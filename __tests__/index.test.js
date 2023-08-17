@@ -184,7 +184,7 @@ describe("/api/articles/:article_id/comments", () => {
   });
 });
 describe("/api/articles/:article_id/comments", () => {
-  test("POST:201 inserts a new comment to articles and sends the new comment back", () => {
+  test("POST:201 inserts a new comment that has author and body properties", () => {
     const newComment = {
       author: "butter_bridge",
       body: "I am 100% sure that we're not completely sure.",
@@ -201,7 +201,7 @@ describe("/api/articles/:article_id/comments", () => {
         expect(response.body.comment.votes).toBe(0);
        });
     });
-  test("POST:201 inserts a new comment to articles and sends the new comment back with a property that doesn't exist", () => {
+  test("POST:201 inserts a new comment that has an additional property that doesn't exist", () => {
     const newComment = {
       author: "butter_bridge",
       body: "I am 100% sure that we're not completely sure.",
@@ -215,7 +215,7 @@ describe("/api/articles/:article_id/comments", () => {
         expect(response.body.comment.article_id).toBe(1);
       });
   });
-  test("POST:400 responds with an appropriate error message when provided with a bad comment", () => {
+  test("POST:400 responds with an appropriate error message when provided with an incorrect end pojnt", () => {
         const newComment = {
           author: "butter_bridge",
           body: "I am 100% sure that we're not completely sure.",
