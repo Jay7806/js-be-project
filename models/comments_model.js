@@ -23,3 +23,4 @@ exports.insertComments = (newComment, article_id) => {
     )
     .then(({ rows }) => rows[0]);
 };
+
