@@ -190,13 +190,15 @@ describe("/api/articles/:article_id/comments", () => {
       body: "I am 100% sure that we're not completely sure.",
     };
     return request(app)
-      .post("/api/articles/1/comments")
+      .post("/api/articles/9/comments")
       .send(newComment)
       .expect(201)
       .then((response) => {
         expect(response.body.comment.comment_id).toBe(19);
         expect(response.body.comment.body).toEqual("I am 100% sure that we're not completely sure.");
         expect(response.body.comment.author).toEqual("butter_bridge")
+        expect(response.body.comment.article_id).toBe(9);
+        expect(response.body.comment.votes).toBe(0);
        });
     });
   test("POST:201 inserts a new comment to articles and sends the new comment back with a property that doesn't exist", () => {
