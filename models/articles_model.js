@@ -42,4 +42,24 @@ exports.updateVotes = (inc_votes, article_id) => {
       return rows[0];
     });
 };
+exports.selectAllArticles = (topic, sortBy = "created_at", orderBy = "DESC") => {
+let queryStr = 'SELECT * FROM articles';
+let queryValues = [];
+
+if (topic) {
+  queryValues.push(topic);
+  queryStr += ` WHERE articles.topic = $1`;
+ 
+}
+  return db
+  .query(queryStr, queryValues)
+      .then(({ rows }) => {
+      return rows; 
+    })
+    .catch((err) => {
+      throw err;
+    });
+};
+
+
 
