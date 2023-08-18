@@ -19,6 +19,7 @@ const {
   handle404,
   handle500,
 } = require("../../controllers/errors_controller");
+const {getUsers} = require("../../controllers/users_controller")
 
 app.use(express.json());
 
@@ -39,6 +40,8 @@ app.post("/api/articles/:article_id/comments", postComment);
 app.patch("/api/articles/:article_id", increaseVotes);
 
 app.delete("/api/comments/:comment_id", deleteComment);
+
+app.get("/api/users", getUsers)
 
 app.use(handle404);
 app.use(handle400);
