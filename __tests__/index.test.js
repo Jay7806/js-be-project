@@ -349,7 +349,7 @@ test("GET 200: Responds with an object with username, name and avatar_url proper
         expect(user).toHaveProperty("username", expect.any(String));
         expect(user).toHaveProperty("name", expect.any(String));
       });
-      expect(body).toBeInstanceOf(Object);
+      expect(Array.isArray(body.users)).toBe(true);
       expect(body.users).toEqual([
         {
           username: "butter_bridge",
