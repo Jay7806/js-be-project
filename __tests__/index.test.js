@@ -385,11 +385,8 @@ describe("api/articles", () => {
       .get("/api/articles?topic=mitch")
       .expect(200)
        .then(({ body }) => {
-        console.log(body.article,'BODY');
          const articles  = body.article;
-         console.log(articles,'ARTICLES');
            articles.forEach((article) => {
-             console.log(article.topic);
              expect(article.topic).toBe("mitch");
           });
         expect(articles).toHaveLength(12);

@@ -54,7 +54,6 @@ if (topic) {
   return db
   .query(queryStr, queryValues)
       .then(({ rows }) => {
-      console.log(rows, 'row');
       return rows; 
     })
     .catch((err) => {
