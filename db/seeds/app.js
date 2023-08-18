@@ -5,11 +5,12 @@ const { getTopics } = require("../../controllers/topics_controller");
 const {
   getCommentsByArticleId,
   postComment,
-} = require("../../controllers/comments_controller");
+  } = require("../../controllers/comments_controller");
 const {
   getApi,
   getArticlesById,
   getArticles,
+  increaseVotes,
 } = require("../../controllers/articles_controller");
 const { getHealthCheck } = require("../../controllers/healthcheck_controller");
 const {
@@ -33,6 +34,8 @@ app.get("/api/articles", getArticles);
 app.get("/api/articles/:article_id/comments", getCommentsByArticleId);
 
 app.post("/api/articles/:article_id/comments", postComment);
+
+app.patch ('/api/articles/:article_id', increaseVotes);
 
 app.use(handle404);
 app.use(handle400);

@@ -195,17 +195,19 @@ describe("/api/articles/:article_id/comments", () => {
       .expect(201)
       .then((response) => {
         expect(response.body.comment.comment_id).toBe(19);
-        expect(response.body.comment.body).toEqual("I am 100% sure that we're not completely sure.");
-        expect(response.body.comment.author).toEqual("butter_bridge")
+        expect(response.body.comment.body).toEqual(
+          "I am 100% sure that we're not completely sure."
+        );
+        expect(response.body.comment.author).toEqual("butter_bridge");
         expect(response.body.comment.article_id).toBe(9);
         expect(response.body.comment.votes).toBe(0);
-       });
-    });
+      });
+  });
   test("POST:201 inserts a new comment that has an additional property that doesn't exist", () => {
     const newComment = {
       author: "butter_bridge",
       body: "I am 100% sure that we're not completely sure.",
-      user: 'Hello'
+      user: "Hello",
     };
     return request(app)
       .post("/api/articles/1/comments")
@@ -215,17 +217,17 @@ describe("/api/articles/:article_id/comments", () => {
         expect(response.body.comment.article_id).toBe(1);
       });
   });
-  test("POST:400 responds with an appropriate error message when provided with an incorrect end pojnt", () => {
-        const newComment = {
-          author: "butter_bridge",
-          body: "I am 100% sure that we're not completely sure.",
-        };
+  test("POST:400 responds with an appropriate error message when provided with an incorrect end point", () => {
+    const newComment = {
+      author: "butter_bridge",
+      body: "I am 100% sure that we're not completely sure.",
+    };
     return request(app)
       .post("/api/articles/article/comments")
       .send(newComment)
       .expect(400)
-      .then(({body}) => {
-        const {msg} = body;
+      .then(({ body }) => {
+        const { msg } = body;
         expect(msg).toEqual("Bad request");
       });
   });
@@ -245,9 +247,9 @@ describe("/api/articles/:article_id/comments", () => {
   });
   test("404: receive a 404 error when username doesn't exist in users", () => {
     const newComment = {
-      author: 'Non author',
-      body: "I am 100% sure that we're not completely sure."
-    }
+      author: "Non author",
+      body: "I am 100% sure that we're not completely sure.",
+    };
     return request(app)
       .post("/api/articles/1/comments")
       .send(newComment)
@@ -255,6 +257,63 @@ describe("/api/articles/:article_id/comments", () => {
       .then(({ body }) => {
         const { msg } = body;
         expect(msg).toEqual("Not found");
+      });
+  });
+});
+describe("/api/articles/:article_id", () => {
+  test("PATCH 200: responds with a 200 code when increasing the vote count of a certain article_id", () => {
+    const newVote = 5;
+    return request(app)
+      .patch("/api/articles/1")
+      .send({ inc_votes: newVote })
+      .expect(200)
+      .then(({ body }) => {
+        const { votes } = body;
+        expect(votes.votes).toBe(105);
+      });
+  });
+    test("PATCH 200: responds with a 200 code when decreasing the vote count of a certain article_id", () => {
+      const newVote = -5;
+      return request(app)
+        .patch("/api/articles/1")
+        .send({ inc_votes: newVote })
+        .expect(200)
+        .then(({ body }) => {
+          const { votes } = body;
+          expect(votes.votes).toBe(95);
+        });
+    });
+  test("404: receive a 404 error when article id is not found", () => {
+    const newVote = 5;
+    return request(app)
+      .patch("/api/articles/999")
+      .send({ inc_votes: newVote })
+      .expect(404)
+      .then(({ body }) => {
+        const { msg } = body;
+        expect(msg).toEqual("Not found");
+      });
+  });
+  test("404: receive a 404 error when newVote isn't a number", () => {
+    const newVote = 'hello';
+    return request(app)
+      .patch("/api/articles/1")
+      .send({ inc_votes: newVote })
+      .expect(404)
+      .then(({ body }) => {
+        const { msg } = body;
+        expect(msg).toEqual("Not found");
+      });
+  });
+  test("PATCH 400 responds with an appropriate error message when provided with an incorrect end point", () => {
+    const newVote = 5;
+    return request(app)
+      .patch("/api/articles/articlesid")
+      .send({ inc_votes: newVote })
+      .expect(400)
+      .then(({ body }) => {
+        const { msg } = body;
+        expect(msg).toEqual("Bad request");
       });
   });
 });

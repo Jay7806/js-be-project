@@ -2,6 +2,7 @@ const fs = require("fs/promises");
 const {
   selectArticleById,
   selectArticles,
+  updateVotes,
 } = require("../models/articles_model");
 
 exports.getArticlesById = (req, res, next) => {
@@ -30,10 +31,24 @@ exports.getApi = (req, res) => {
       res.status(200).send({ data: parsedData });
     })
     .catch((error) => {
-      console.log("Error reading endpoints.json:", error);
+      next(error);
     });
 };
+exports.increaseVotes = (req, res, next) => {
+  const { article_id } = req.params;
+  const { inc_votes } = req.body;
 
-
-
-
+  if (typeof inc_votes !== "number") {
+    return res.status(404).json({ msg: "Not found" });
+  }
+  updateVotes(inc_votes, article_id)
+    .then((votes) => {
+      if (votes === undefined) {
+        return res.status(404).json({ msg: "Not found" });
+      }
+      res.status(200).send({ votes });
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
