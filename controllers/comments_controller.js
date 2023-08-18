@@ -1,5 +1,9 @@
 const fs = require("fs/promises");
-const { selectComments, insertComments } = require("../models/comments_model");
+const {
+  selectComments,
+  insertComments,
+  removeCommentById,
+} = require("../models/comments_model");
 const { selectArticleById } = require("../models/articles_model");
 
 exports.getCommentsByArticleId = (req, res, next) => {
@@ -16,11 +20,23 @@ exports.getCommentsByArticleId = (req, res, next) => {
 exports.postComment = (req, res, next) => {
   const { article_id } = req.params;
   insertComments(req.body, article_id)
-   .then((comment) => {
-   res.status(201).send({ comment });
+    .then((comment) => {
+      res.status(201).send({ comment });
     })
     .catch((err) => {
       next(err);
     });
 };
-
+exports.deleteComment = (req, res, next) => {
+  const { comment_id } = req.params;
+  removeCommentById(comment_id)
+    .then(() => {
+      res.status(204).send();
+    })
+    .catch((err) => {
+      if (err.message === "Not found") {
+        return res.status(404).json({ msg: "Not found" });
+      }
+      next(err);
+    });
+};

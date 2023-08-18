@@ -11,7 +11,6 @@ afterAll(() => {
 beforeEach(() => {
   return seed(data);
 });
-
 describe("api/healthcheck", () => {
   test("returns 200 status code", () => {
     return request(app).get("/api/healthcheck").expect(200);
@@ -272,17 +271,17 @@ describe("/api/articles/:article_id", () => {
         expect(votes.votes).toBe(105);
       });
   });
-    test("PATCH 200: responds with a 200 code when decreasing the vote count of a certain article_id", () => {
-      const newVote = -5;
-      return request(app)
-        .patch("/api/articles/1")
-        .send({ inc_votes: newVote })
-        .expect(200)
-        .then(({ body }) => {
-          const { votes } = body;
-          expect(votes.votes).toBe(95);
-        });
-    });
+  test("PATCH 200: responds with a 200 code when decreasing the vote count of a certain article_id", () => {
+    const newVote = -5;
+    return request(app)
+      .patch("/api/articles/1")
+      .send({ inc_votes: newVote })
+      .expect(200)
+      .then(({ body }) => {
+        const { votes } = body;
+        expect(votes.votes).toBe(95);
+      });
+  });
   test("404: receive a 404 error when article id is not found", () => {
     const newVote = 5;
     return request(app)
@@ -295,7 +294,7 @@ describe("/api/articles/:article_id", () => {
       });
   });
   test("404: receive a 404 error when newVote isn't a number", () => {
-    const newVote = 'hello';
+    const newVote = "hello";
     return request(app)
       .patch("/api/articles/1")
       .send({ inc_votes: newVote })
@@ -314,6 +313,19 @@ describe("/api/articles/:article_id", () => {
       .then(({ body }) => {
         const { msg } = body;
         expect(msg).toEqual("Bad request");
+      });
+  });
+});
+describe("/api/comments/:comment_id", () => {
+  test("DELETE 204: returns a 204 when a comment is deleted by its comment id", () => {
+    return request(app).delete("/api/comments/1").expect(204);
+  });
+  test("DELETE 404: returns a 404 error when the comment id doesn't exist", () => {
+    return request(app)
+      .delete("/api/comments/500")
+      .expect(404)
+      .then((response) => {
+        expect(response.body.msg).toBe("Not found");
       });
   });
 });
