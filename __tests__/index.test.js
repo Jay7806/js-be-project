@@ -110,7 +110,7 @@ describe("api/articles", () => {
       .get("/api/articles")
       .expect(200)
       .then(({ body }) => {
-        const { articles } = body;
+        const  articles = body.article;
         expect(articles).toHaveLength(13);
         expect(articles).toBeSortedBy(articles.created_by, {
           descending: true,
@@ -379,3 +379,23 @@ test("GET 200: Responds with an object with username, name and avatar_url proper
     });
   });
 });
+describe("api/articles", () => {
+  test("GET: 200 responds to different queries with the data that has been asked for", () => {
+    return request(app)
+      .get("/api/articles?topic=mitch")
+      .expect(200)
+       .then(({ body }) => {
+        console.log(body.article,'BODY');
+         const articles  = body.article;
+         console.log(articles,'ARTICLES');
+           articles.forEach((article) => {
+             console.log(article.topic);
+             expect(article.topic).toBe("mitch");
+          });
+        expect(articles).toHaveLength(12);
+        expect(articles).toBeSortedBy(articles.created_at, {
+          descending: true,
+         });
+       })
+    })
+  })

@@ -3,6 +3,7 @@ const {
   selectArticleById,
   selectArticles,
   updateVotes,
+  selectAllArticles
 } = require("../models/articles_model");
 
 exports.getArticlesById = (req, res, next) => {
@@ -49,6 +50,17 @@ exports.increaseVotes = (req, res, next) => {
       res.status(200).send({ votes });
     })
     .catch((err) => {
+      next(err);
+    });
+};
+exports.getAllArticles = (req, res, next) => {
+  const {topic} = req.query
+    selectAllArticles(topic)
+    .then((article) => {
+      res.status(200).send({ article });
+    })
+    .catch((err) => {
+      console.log(err);
       next(err);
     });
 };

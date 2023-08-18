@@ -12,6 +12,7 @@ const {
   getArticlesById,
   getArticles,
   increaseVotes,
+  getAllArticles
 } = require("../../controllers/articles_controller");
 const { getHealthCheck } = require("../../controllers/healthcheck_controller");
 const {
@@ -31,7 +32,9 @@ app.get("/api", getApi);
 
 app.get("/api/articles/:article_id", getArticlesById);
 
-app.get("/api/articles", getArticles);
+app.get("/api/articles", getAllArticles);
+
+app.get("/api/articles", getArticles)
 
 app.get("/api/articles/:article_id/comments", getCommentsByArticleId);
 
