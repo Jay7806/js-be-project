@@ -328,4 +328,12 @@ describe("/api/comments/:comment_id", () => {
         expect(response.body.msg).toBe("Not found");
       });
   });
+      test("DELETE 400 responds with an appropriate error message when provided with an incorrect end point", () => {
+        return request(app)
+          .delete("/api/comments/comment")
+          .expect(400)
+         .then((response) => {
+         expect(response.body.msg).toBe("Bad request");
+                 });
+      });
 });

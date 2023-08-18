@@ -34,9 +34,6 @@ exports.deleteComment = (req, res, next) => {
       res.status(204).send();
     })
     .catch((err) => {
-      if (err.message === "Not found") {
-        return res.status(404).json({ msg: "Not found" });
-      }
       next(err);
     });
 };
