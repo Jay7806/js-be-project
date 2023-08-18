@@ -5,7 +5,8 @@ const { getTopics } = require("../../controllers/topics_controller");
 const {
   getCommentsByArticleId,
   postComment,
-  } = require("../../controllers/comments_controller");
+  deleteComment,
+} = require("../../controllers/comments_controller");
 const {
   getApi,
   getArticlesById,
@@ -35,11 +36,12 @@ app.get("/api/articles/:article_id/comments", getCommentsByArticleId);
 
 app.post("/api/articles/:article_id/comments", postComment);
 
-app.patch ('/api/articles/:article_id', increaseVotes);
+app.patch("/api/articles/:article_id", increaseVotes);
+
+app.delete("/api/comments/:comment_id", deleteComment);
 
 app.use(handle404);
 app.use(handle400);
 app.use(handle500);
-
 
 module.exports = app;

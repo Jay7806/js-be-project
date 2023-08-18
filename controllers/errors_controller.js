@@ -4,10 +4,10 @@ exports.handle400 = (err, req, res, next) => {
   } else next(err);
 };
 exports.handle404 = (err, req, res, next) => {
-  if(err.code === '23503') {
-        res.status(404).send({ msg: "Not found" });
+  if (err.code === "23503" || err.message === "Not found") {
+    res.status(404).send({ msg: "Not found" });
   } else next(err);
-  };
+};
 exports.handle500 = (err, req, res, next) => {
   if (err.status) {
     res.status(err.status).json({ msg: err.msg });
