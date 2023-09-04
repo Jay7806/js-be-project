@@ -12,7 +12,7 @@ const {
   getArticlesById,
   getArticles,
   increaseVotes,
-  getAllArticles
+  getAllArticles,
 } = require("../../controllers/articles_controller");
 const { getHealthCheck } = require("../../controllers/healthcheck_controller");
 const {
@@ -20,7 +20,10 @@ const {
   handle404,
   handle500,
 } = require("../../controllers/errors_controller");
-const {getUsers} = require("../../controllers/users_controller")
+const { getUsers } = require("../../controllers/users_controller");
+const cors = require("cors");
+
+app.use(cors());
 
 app.use(express.json());
 
@@ -34,7 +37,7 @@ app.get("/api/articles/:article_id", getArticlesById);
 
 app.get("/api/articles", getAllArticles);
 
-app.get("/api/articles", getArticles)
+app.get("/api/articles", getArticles);
 
 app.get("/api/articles/:article_id/comments", getCommentsByArticleId);
 
@@ -44,7 +47,7 @@ app.patch("/api/articles/:article_id", increaseVotes);
 
 app.delete("/api/comments/:comment_id", deleteComment);
 
-app.get("/api/users", getUsers)
+app.get("/api/users", getUsers);
 
 app.use(handle404);
 app.use(handle400);
